@@ -19,38 +19,50 @@ fn do_sleep(seconds: u64) {
 }
 
 #[derive(Parser, Debug)]
-/// scorn is a CLI tool to generate <REPEAT> random strings of length <LENGTH> and sleeps for <SLEEP> seconds between outputs.
-///
-/// The program is designed to be run from the command line and takes the following arguments:
+/// scorn is a CLI tool to generate <REPEAT> random strings of <COMPONENTS> random strings 
+/// each of length <LENGTH> and separated by `-`. Between the output of two random strings, 
+/// the program sleeps for <SLEEP> seconds. The program will print the output in double 
+/// quotes unless the --raw option is set.
 /// 
-/// `--length`: The length of the random string to generate.
-/// 
-/// `--sleep`: The number of seconds to sleep between generating random strings.
-///
-/// `--repeat`: The number of times to repeat the process of generating a random string and sleeping.
-///
-/// The program uses the `clap` crate for command line argument parsing.
-/// The program uses the `rand` crate to generate random strings and the `std::thread` module to sleep.
 struct Args {
     /// number of random characters to generate
-    #[clap(short, long, default_value = "32")]
+    #[clap(short, long, default_value = "6")]
     length: usize,
     /// number of seconds to sleep
-    #[clap(short, long, default_value = "10")]
+    #[clap(short, long, default_value = "1")]
     sleep: u64,
     /// number of times to repeat
     #[clap(short, long, default_value = "1000000000")]
     repeat: u64,
+    /// unless option --raw is set, we will print the random string in double quotes
+    /// Note that there is not short version since -r defines the repeat option
+    #[clap(long, default_value = "false")]
+    raw: bool,
+    /// number of components to generate.
+    #[clap(short, long, default_value = "3")]
+    components: u64,
 }
 
 fn main() {
     let args = Args::parse();
-    let length = args.length;
-    let sleep = args.sleep;
-    let repeat = args.repeat;
-    for _ in 0..repeat {
-        let random_string = generate_random_string(length);
-        println!("{random_string}");
-        do_sleep(sleep);
+    let delimiter = if args.raw { "" } else { "\"" };
+    for i in 0..args.repeat {
+        let mut separator = "".to_string();
+        print!("{delimiter}"); // Print in double quotes unless --raw is set
+        for _ in 0..args.components {
+            print!(
+                "{separator}{random_string}",
+                random_string = generate_random_string(args.length)
+            );
+            separator = "-".to_string();
+        }
+        println!("{delimiter}");
+        if i != args.repeat - 1 {
+            // Sleep only if not the last iteration
+            // This is to avoid sleeping after the last output
+            // and to ensure that we exit after the last output
+            // without any delay.
+            do_sleep(args.sleep);
+        }
     }
 }
