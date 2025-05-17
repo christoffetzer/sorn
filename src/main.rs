@@ -19,10 +19,10 @@ fn do_sleep(seconds: u64) {
 }
 
 #[derive(Parser, Debug)]
-/// scorn is a CLI tool to generate <REPEAT> random strings of <COMPONENTS> random strings 
+/// sorn is a CLI tool to generate <REPEAT> random strings each consisting of <COMPONENTS> random strings 
 /// each of length <LENGTH> and separated by `-`. Between the output of two random strings, 
 /// the program sleeps for <SLEEP> seconds. The program will print the output in double 
-/// quotes unless the --raw option is set.
+/// quotes unless the --raw option is set. Usually, we use this program to generate unique error numbers.
 /// 
 struct Args {
     /// number of random characters to generate

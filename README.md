@@ -1,6 +1,6 @@
-# `sorn_cli`
+# `sorn`
 
-`scorn_cli` is a CLI tool to generate <REPEAT> random strings of length <LENGTH> and sleeps for <SLEEP> seconds between outputs.
+`sorn` is a CLI tool to generate <REPEAT> random strings of length <LENGTH> and sleeps for <SLEEP> seconds between outputs.
 
 The program is designed to be run from the command line and takes the following arguments:
 

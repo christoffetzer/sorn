@@ -209,7 +209,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sorn_cli"
+name = "sorn"
 version = "0.1.0"
 dependencies = [
  "clap",
