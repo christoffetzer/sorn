@@ -29,7 +29,7 @@ struct Args {
     #[clap(short, long, default_value = "6")]
     length: usize,
     /// number of seconds to sleep
-    #[clap(short, long, default_value = "1")]
+    #[clap(short, long, default_value = "10")]
     sleep: u64,
     /// number of times to repeat
     #[clap(short, long, default_value = "1000000000")]
@@ -45,10 +45,10 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let delimiter = if args.raw { "" } else { "\"" };
+    let (left_delimiter, right_delimiter) = if args.raw { ("", "") } else { ("(", ")") };
     for i in 0..args.repeat {
         let mut separator = "".to_string();
-        print!("{delimiter}"); // Print in double quotes unless --raw is set
+        print!("{left_delimiter}"); // Print in double quotes unless --raw is set
         for _ in 0..args.components {
             print!(
                 "{separator}{random_string}",
@@ -56,7 +56,7 @@ fn main() {
             );
             separator = "-".to_string();
         }
-        println!("{delimiter}");
+        println!("{right_delimiter}");
         if i != args.repeat - 1 {
             // Sleep only if not the last iteration
             // This is to avoid sleeping after the last output
